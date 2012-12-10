@@ -65,17 +65,20 @@ Hook.prototype.listen = function(options, cb) {
     
     // properly shutdown connection
     function destroy() {
-		// forget this client
-		for (var i=0; i<self._clients.length; i++) {
-			if (self._clients[i].id==cliId) {
-				self._clients.splice(i,1);
-				// shutdown proxy and nssocket
-				client.proxy.removeAllListeners();
-				client.socket.destroy();
-				break;
-			}
-		}
-	}
+      self.emit('hook::disconnected', {
+        id: cliId,
+        name: client.name
+      });
+      // forget this client
+      for (var i=0; i<self._clients.length; i++) {
+      	if (self._clients[i].id==cliId) {
+      		self._clients.splice(i,1);
+      		// shutdown proxy and nssocket
+      		client.proxy.removeAllListeners();
+      		client.socket.destroy();
+      		break;
+      	}
+      }	}
     
     // clean context on client lost
     socket.on('close', function () {
