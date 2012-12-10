@@ -244,7 +244,7 @@ Hook.prototype.stop = function(cb) {
         this._gcId = null;
     }
     this._client.once('close',cb);
-    this._client.destroy();
+    this._client.end();
   } else {
     cb();
   }
